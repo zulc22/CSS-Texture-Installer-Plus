@@ -11,13 +11,13 @@
 	let i;
 
 	figlet.parseFont('Slant2', fs.readFileSync(__dirname + '/assets/Slant.flf', 'utf8'))
-	console.log(chalk.green(figlet.textSync('CSSource installer', {
+	console.log(chalk.green(figlet.textSync('CSSTI+', {
 		font: 'Slant2',
 		horizontalLayout: 'fitted',
 		verticalLayout: 'fitted'
-	}) + chalk.blueBright('v1.1.0 stable')))
-	console.log(chalk.magenta(`A utility designed to help make installing CSSource textures into Garry's Mod ${chalk.blue('safe')} while also using the ${chalk.blue('legal method')} by utilizing steamcmd.`))
-	console.log(chalk.hex('#7289DA')(`Have any questions? Join my discord: https://discord.gg/kb4KREA`))
+	}) + chalk.blueBright('v1.2.0 stable')))
+	console.log(chalk.magenta(`A utility designed to make installing CSSource textures into Garry's Mod ${chalk.blue('easy, safe, and legal')}, by scripting SteamCMD.`))
+	console.log(chalk.hex('#7289DA')(`Have any questions? Join my discord: https://discord.gg/UEb6VB2gqu`))
 	progress.start('Verifying steam directory...')
 
 	let steamIPath = await (async () => {
@@ -61,10 +61,10 @@
 			} else resolve(false)
 		})
 	})()
-	if (!gmodIPath) {
-		return progress.fail('Garrys Mod could not be found on your computer.\nAutomatically closing window in 10 seconds.', 10000)
+	if (!gmodIPath || !fs.existsSync(gmodIPath)) {
+		return progress.fail('Garry\'s Mod could not be found on your computer.\nAutomatically closing window in 10 seconds.', 10000)
 	}
-	progress.succeed(`Garrys Mod installation directory found: ${gmodIPath}`)
+	progress.succeed(`Garry's Mod installation directory found: ${gmodIPath}`)
 	progress.start('Checking for steamcmd...')
 	if (!fs.existsSync(appDirectory + '/steam/steamcmd.exe')) {
 		await (async () => {
@@ -146,7 +146,7 @@
 			})
 		})()
 		if (typeof i !== 'boolean') return progress.fail(`Error: ${i}.\nAutomatically closing window in 10 seconds.`, 10000)
-		progress.start('Moving Counter-Strike Source textures into Garrys Mod... The console may freeze, this is normal.')
+		progress.start('Moving Counter-Strike Source textures into Garry\'s Mod... The console may freeze, this is normal.')
 		if (fs.existsSync(`${gmodIPath}/addons/css_content`)) {
 			progress.update('Deleting old css_content folder...')
 			fs.removeSync(`${gmodIPath}/addons/css_content`)
@@ -163,7 +163,7 @@
 		for (let folder of removeSet) {
 			if (fs.existsSync(`${appDirectory}/${folder}`)) fs.removeSync(`${appDirectory}/${folder}`)
 		}
-		progress.succeed(`The Counter-Strike Source textures have been successfully installed into Garrys Mod.\nInstallation path: ${gmodIPath}/addons/css_content`)
+		progress.succeed(`The Counter-Strike Source textures have been successfully installed into Garry's Mod.\nInstallation path: ${gmodIPath}/addons/css_content`)
 		progress.log('You may now close this console window.')
 	})
 })()
