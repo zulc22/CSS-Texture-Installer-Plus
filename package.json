@@ -1,15 +1,15 @@
 {
-  "name": "cssource-installer",
-  "version": "1.0.0",
-  "description": "A simple utility tool to install CSSource textures into Garrys Mod from an official steam source.",
+  "name": "css-texture-installer-plus",
+  "version": "1.2.0",
+  "description": "An easy to use, straight forward Counter Strike: Source texture installer for Garry's Mod.",
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "build": "node prebuild.js && pkg -t node12-win-x64 main.js --config package.json --out-path bin/ && node postbuild.js",
+    "build": "node prebuild.js && npx pkg -t node12-win-x64 main.js --config package.json --out-path bin/ && node postbuild.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "ITS_N1GH7OWL",
-  "license": "ISC",
+  "author": "zulc22",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "axios": "^0.21.1",
     "chalk": "^4.0.0",

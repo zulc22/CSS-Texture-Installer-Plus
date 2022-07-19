@@ -1,2 +1,2 @@
 const fs = require('fs')
-fs.rmdirSync("bin", { recursive: true })
+fs.rmSync("bin", { recursive: true })
