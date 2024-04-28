@@ -1,6 +1,6 @@
 (async () => {
 	const steamcmd = require('./util/steamcmd')
-	const reg = require('./util/registry')
+	const regedit = require('regedit').promisified
 	const progress = require('./util/progress')
 	const fs = require('fs-extra')
 	const enquirer = require('enquirer')
@@ -15,27 +15,28 @@
 		font: 'Slant2',
 		horizontalLayout: 'fitted',
 		verticalLayout: 'fitted'
-	}) + chalk.blueBright('v1.2.0 stable')))
+	}) + chalk.blueBright('v1.3.0 stable')))
 	console.log(chalk.magenta(`A utility designed to make installing CSSource textures into Garry's Mod ${chalk.blue('easy, safe, and legal')}, by scripting SteamCMD.`))
-	console.log(chalk.hex('#7289DA')(`Have any questions? Join my discord: https://discord.gg/UEb6VB2gqu`))
+	console.log(chalk.hex('#7289DA')(`If you have any issues, be sure to file on GitHub: https://github.com/zulc22/CSS-Texture-Installer-Plus/issues`))
 	progress.start('Verifying steam directory...')
 
 	let steamIPath = await (async () => {
-		return new Promise(function (resolve) {
-			reg.list('HKCU\\SOFTWARE\\Valve\\Steam', (registry) => {
-				if (!registry) {
-					reg.list('HKLM\\SOFTWARE\\Valve\\Steam', (registry) => {
-						if (!registry) {
-							reg.list('HKLM\\SOFTWARE\\WOW6432Node\\Valve\\Steam', (registry) => {
-								if (!registry) resolve(registry)
-								else resolve(registry.InstallPath.value)
-							})
-						} else resolve(registry.InstallPath.value)
-					})
-
-				} else resolve(registry.SteamPath.value)
-			})
-		})
+		steam_search_locations = [
+			"HKCU\\SOFTWARE\\Valve\\Steam",
+			"HKCU\\SOFTWARE\\WOW6432Node\\Valve\\Steam",
+			"HKLM\\SOFTWARE\\Valve\\Steam",
+			"HKLM\\SOFTWARE\\WOW6432Node\\Valve\\Steam"
+		];
+		for (const loc of steam_search_locations) {
+			try {
+				reg = await regedit.list(loc);
+				return reg[loc].values['SteamPath'].value;
+				break;
+			} catch {
+				continue;
+			}
+		}
+		return null;
 	})()
 
 	if (!steamIPath) {
