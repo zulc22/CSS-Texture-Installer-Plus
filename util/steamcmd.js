@@ -1,4 +1,4 @@
-const pty = require('node-pty')
+const pty = require('@lydell/node-pty')
 const fs = require('fs-extra')
 const seven = require('node-7z')
 const axios = require('axios')

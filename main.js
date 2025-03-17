@@ -1,6 +1,6 @@
 (async () => {
 	const steamcmd = require('./util/steamcmd')
-	const regedit = require('regedit').promisified
+	const reg = require('native-reg')
 	const progress = require('./util/progress')
 	const fs = require('fs-extra')
 	const enquirer = require('enquirer')
@@ -15,23 +15,22 @@
 		font: 'Slant2',
 		horizontalLayout: 'fitted',
 		verticalLayout: 'fitted'
-	}) + chalk.blueBright('v1.3.0 stable')))
+	}) + chalk.blueBright('v1.4.0 stable')))
 	console.log(chalk.magenta(`A utility designed to make installing CSSource textures into Garry's Mod ${chalk.blue('easy, safe, and legal')}, by scripting SteamCMD.`))
 	console.log(chalk.hex('#7289DA')(`If you have any issues, be sure to file on GitHub: https://github.com/zulc22/CSS-Texture-Installer-Plus/issues`))
 	progress.start('Verifying steam directory...')
 
 	let steamIPath = await (async () => {
 		steam_search_locations = [
-			"HKCU\\SOFTWARE\\Valve\\Steam",
-			"HKCU\\SOFTWARE\\WOW6432Node\\Valve\\Steam",
-			"HKLM\\SOFTWARE\\Valve\\Steam",
-			"HKLM\\SOFTWARE\\WOW6432Node\\Valve\\Steam"
+			"SOFTWARE\\Valve\\Steam",
+			"SOFTWARE\\WOW6432Node\\Valve\\Steam"
 		];
 		for (const loc of steam_search_locations) {
 			try {
-				reg = await regedit.list(loc);
-				return reg[loc].values['SteamPath'].value;
-				break;
+				steamkey = reg.openKey(reg.HKCU, loc, reg.Access.READ);
+				if (!steamkey) steamkey = reg.openKey(reg.HKLM, loc, reg.Access.READ);
+				if (!steamkey) continue;
+				return reg.getValue(steamkey, null, 'SteamPath');
 			} catch {
 				continue;
 			}
@@ -123,7 +122,7 @@
 					if (dat.code === '0x101') {
 						return progress.update(`Commiting Counter-Strike Source dedicated server files: ${Math.ceil(dat.progress)}%`)
 					}
-					return progress.update('Error: unexpected code. Perhaps try rerunning the program.\nAutomatically closing window in 10 seconds.', 10000)
+					// return progress.update('Error: unexpected code. Perhaps try rerunning the program.\nAutomatically closing window in 10 seconds.', 10000)
 				}).then(() => {
 					progress.succeed('Downloaded Counter-Strike Source dedicated server files.')
 					resolve(true)

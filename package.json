@@ -1,32 +1,33 @@
 {
   "name": "css-texture-installer-plus",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "An easy to use, straight forward Counter Strike: Source texture installer for Garry's Mod.",
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "build": "node prebuild.js && npx pkg -t node12-win-x64 main.js --config package.json --out-path bin/ && node postbuild.js",
+    "build": "node prebuild.js && npx @yao-pkg/pkg -t node22-win-x64 main.js --config package.json -o bin/cssti+.exe && node postbuild.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "zulc22",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@lydell/node-pty": "^1.1.0",
     "axios": "^0.21.1",
     "chalk": "^4.0.0",
     "colors": "^1.4.0",
     "enquirer": "^2.3.5",
     "figlet": "^1.3.0",
     "fs-extra": "^9.0.0",
+    "native-reg": "^1.1.1",
     "node-7z": "^2.1.1",
-    "node-pty": "^1.0.0",
     "ora": "^4.0.4",
-    "regedit": "^5.1.3",
     "vdf-parser": "^1.2.0"
   },
   "pkg": {
     "assets": [
       "assets/",
-      "util/"
+      "util/",
+      "node_modules/@lydell"
     ]
   }
 }
